@@ -6,20 +6,30 @@
 +(int)main:(NSArray*)args
 {
    OCSDLContext *ctx = [[OCSDLContext alloc] init];
-
    OCSDLWindow *window = [[OCSDLWindow alloc] init:@"SDL test" width:640 height:480];
-   OCSDLSurface *image = [[OCSDLSurface alloc] initWithBMP:@"test.bmp"];
-   if (!(ctx && image)) {
-      return -1;
-   }
+   OCSDLSurface *image1 = [[OCSDLSurface alloc] initWithBMP:@"test1.bmp"];
+   OCSDLSurface *image2 = [[OCSDLSurface alloc] initWithBMP:@"test2.bmp"];
 
-   [window updateWindowSurface];
-   [[window surface] blit:image dstRect:NULL srcRect:NULL];
    for (;;) {
       OCSDLEvent *e = [ctx pollEvent];
-      if ([e typeId] == SDL_QUIT) {
+      if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
+         [e release];
          break;
       }
+
+      if ([e isKindOfClass:[OCSDLKeyboardEvent class]]) {
+         OCSDLKeyboardEvent *keyboardEvent = (OCSDLKeyboardEvent*)e;
+         switch ([keyboardEvent keysym].sym) {
+            case SDLK_1:
+               [[window surface] blit:image1 dstRect:NULL srcRect:NULL];
+               break;
+            case SDLK_2:
+               [[window surface] blit:image2 dstRect:NULL srcRect:NULL];
+               break;
+         }
+      }
+
+      [e release];
       [window updateWindowSurface];
    }
    return 0;

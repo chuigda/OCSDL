@@ -1,4 +1,9 @@
-OCFLAGS = -fconstant-string-class=NSConstantString -I/usr/include/GNUstep -std=c11
+OCFLAGS = \
+	-fobjc-runtime=gnustep-2.0 \
+ 	-fconstant-string-class=NSConstantString \
+ 	-I$(GNUSTEP_PATH)/include \
+ 	-std=c11
+
 INCLUDE_FILES = \
 	Application.h \
 	OCSDL.h \
@@ -16,13 +21,13 @@ run: OCSDLTest
 	./OCSDLTest
 
 OCSDLTest: Main.o Application.o libOCSDL.a
-	cc Main.o \
+	clang Main.o \
 		Application.o \
+		-fobjc-runtime=gnustep-2.0 \
 		-o OCSDLTest \
-		-L/usr/lib/GNUstep \
 		-L. \
+		-L$(GNUSTEP_PATH)/lib \
 		-lobjc \
-		-lgnustep-base \
 		-fconstant-string-class=NSConstantString \
 		-lSDL2 \
 		-lOCSDL
@@ -31,22 +36,22 @@ libOCSDL.a: OCSDL.o OCSDLSurface.o OCSDLWindow.o OCSDLEvent.o $(INCLUDE_FILES)
 	ar rcs libOCSDL.a OCSDL.o OCSDLSurface.o OCSDLWindow.o OCSDLEvent.o
 
 Main.o: Main.m $(INCLUDE_FILES)
-	cc Main.m $(OCFLAGS) -c
+	clang Main.m $(OCFLAGS) -c
 
 Application.o: Application.m $(INCLUDE_FILES)
-	cc Application.m $(OCFLAGS) -c
+	clang Application.m $(OCFLAGS) -c
 
 OCSDL.o: OCSDL.m $(INCLUDE_FILES)
-	cc OCSDL.m $(OCFLAGS) -c
+	clang OCSDL.m $(OCFLAGS) -c
 
 OCSDLSurface.o: OCSDLSurface.m $(INCLUDE_FILES)
-	cc OCSDLSurface.m $(OCFLAGS) -c
+	clang OCSDLSurface.m $(OCFLAGS) -c
 
 OCSDLWindow.o: OCSDLWindow.m $(INCLUDE_FILES)
-	cc OCSDLWindow.m $(OCFLAGS) -c
+	clang OCSDLWindow.m $(OCFLAGS) -c
 
 OCSDLEvent.o: OCSDLEvent.m $(INCLUDE_FILES)
-	cc OCSDLEvent.m $(OCFLAGS) -c
+	clang OCSDLEvent.m $(OCFLAGS) -c
 
 .PHONY: clean
 clean:

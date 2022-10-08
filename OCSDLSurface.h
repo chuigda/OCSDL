@@ -6,6 +6,7 @@
 @interface OCSDLSurface : NSObject
 {
    SDL_Surface *surface;
+   BOOL isOwnedSurface;
 }
 
 -(id)initWithWindow:(SDL_Window*)window sinkrate:(Sinkrate)sinkrate;

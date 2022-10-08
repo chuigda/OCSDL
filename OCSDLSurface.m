@@ -2,14 +2,11 @@
 #import "OCUtil.h"
 
 @implementation OCSDLSurface
-{
-   SDL_Surface *surface;
-}
-
 -(id)initWithWindow:(SDL_Window*)window sinkrate:(Sinkrate)sinkrate
 {
    OC_INIT_BOILERPLATE({
       surface = SDL_GetWindowSurface(window);
+      isOwnedSurface = false;
    })
 }
 
@@ -17,6 +14,7 @@
 {
    OC_INIT_BOILERPLATE({
       surface = SDL_LoadBMP([fileName cString]);
+      isOwnedSurface = true;
       if (!surface) {
          return nil;
       }
@@ -34,7 +32,10 @@
 }
 
 OC_DEALLOC_BOILERPLATE({
-   SDL_FreeSurface(surface);
+   if (isOwnedSurface) {
+      NSLog(@"deallocating surface resource");
+      SDL_FreeSurface(surface);
+   }
 })
 
 @end

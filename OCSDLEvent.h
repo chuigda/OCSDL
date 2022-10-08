@@ -11,7 +11,9 @@
 +(id)fromNative:(SDL_Event)nativeEvent;
 -(id)initPrivate:(SDL_Event)nativeEvent sinkrate:(Sinkrate)sinkrate;
 -(uint32_t)typeId;
--(SDL_Event)native;
+-(uint32_t)timestamp;
+-(SDL_Event)nativeEvent;
+-(void)dealloc;
 @end
 
 @interface OCSDLUnknownEvent : OCSDLEvent
@@ -20,5 +22,13 @@
 
 @interface OCSDLQuitEvent : OCSDLEvent
 -(id)initPrivate:(SDL_Event)nativeEvent sinkrate:(Sinkrate)sinkrate;
--(uint32_t)timestamp;
+@end
+
+@interface OCSDLKeyboardEvent : OCSDLEvent
+-(id)initPrivate:(SDL_Event)nativeEvent sinkrate:(Sinkrate)sinkrate;
+
+-(uint32_t)windowId;
+-(uint8_t)state;
+-(uint8_t)repeat;
+-(SDL_Keysym)keysym;
 @end

@@ -2,11 +2,6 @@
 #import "OCUtil.h"
 
 @implementation OCSDLWindow
-{
-   SDL_Window *window;
-   OCSDLSurface *surface;
-}
-
 -(id)init:(NSString*)title width:(int)width height:(int)height
 {
    OC_INIT_BOILERPLATE({
@@ -46,6 +41,7 @@
 }
 
 OC_DEALLOC_BOILERPLATE({
+   NSLog(@"deallocating window");
    SDL_DestroyWindow(window);
 })
 
