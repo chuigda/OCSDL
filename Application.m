@@ -13,7 +13,6 @@
    for (;;) {
       OCSDLEvent *e = [ctx pollEvent];
       if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
-         [e release];
          break;
       }
 
@@ -29,7 +28,6 @@
          }
       }
 
-      [e release];
       [window updateWindowSurface];
    }
    return 0;

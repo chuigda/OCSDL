@@ -1,8 +1,9 @@
 OCFLAGS = \
 	-fobjc-runtime=gnustep-2.0 \
  	-fconstant-string-class=NSConstantString \
- 	-I$(GNUSTEP_PATH)/include \
- 	-std=c11
+ 	-std=c11 \
+ 	-I/home/icey/program/c4/gnustep-libobjc2/include \
+ 	-fobjc-arc
 
 INCLUDE_FILES = \
 	Application.h \
@@ -26,7 +27,7 @@ OCSDLTest: Main.o Application.o libOCSDL.a
 		-fobjc-runtime=gnustep-2.0 \
 		-o OCSDLTest \
 		-L. \
-		-L$(GNUSTEP_PATH)/lib \
+		-L/home/icey/program/c4/gnustep-libobjc2/lib \
 		-lobjc \
 		-fconstant-string-class=NSConstantString \
 		-lSDL2 \

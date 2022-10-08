@@ -13,7 +13,6 @@
 -(uint32_t)typeId;
 -(uint32_t)timestamp;
 -(SDL_Event)nativeEvent;
--(void)dealloc;
 @end
 
 @interface OCSDLUnknownEvent : OCSDLEvent

@@ -14,5 +14,4 @@
       {                              \
          CODE                        \
       }                              \
-      [super dealloc];               \
    }

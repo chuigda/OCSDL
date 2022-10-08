@@ -48,11 +48,6 @@
 {
    return event;
 }
-
--(void)dealloc
-{
-   [super dealloc];
-}
 @end
 
 #define OC_EVENT_INIT_BOILERPLATE(CODE)                                \
