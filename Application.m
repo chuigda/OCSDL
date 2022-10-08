@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "Application.h"
-#import "OCSDL/include/OCSDL.h"
+#import "OCSDL.h"
 
 @implementation Application
 +(int)main:(NSArray*)args

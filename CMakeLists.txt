@@ -10,11 +10,17 @@ link_directories(${GNUSTEP_PATH}/lib)
 
 add_library(
         OCSDL
-        SHARED
         OCSDL/src/OCSDL.m
         OCSDL/src/OCSDLEvent.m
         OCSDL/src/OCSDLSurface.m
         OCSDL/src/OCSDLWindow.m
 )
+include_directories(OCSDL/include)
 
-target_link_libraries(OCSDL objc gnustep-base)
+add_executable(
+        TestOCSDL
+        Main.m
+        Application.m
+)
+
+target_link_libraries(TestOCSDL OCSDL objc gnustep-base SDL2)

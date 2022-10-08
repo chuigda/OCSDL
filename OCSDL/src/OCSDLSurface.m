@@ -1,5 +1,5 @@
-#import "../include/OCSDLSurface.h"
-#import "../include/OCUtil.h"
+#import "OCSDLSurface.h"
+#import "OCUtil.h"
 
 @implementation OCSDLSurface
 -(id)initWithWindow:(SDL_Window*)window sinkrate:(Sinkrate)sinkrate
@@ -34,7 +34,6 @@
 -(void)dealloc
 {
    if (isOwnedSurface) {
-      NSLog(@"deallocating surface resource");
       SDL_FreeSurface(surface);
    }
 }

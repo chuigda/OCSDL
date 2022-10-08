@@ -1,5 +1,5 @@
-#import "../include/OCSDL.h"
-#import "../include/OCUtil.h"
+#import "OCSDL.h"
+#import "OCUtil.h"
 
 @implementation OCSDLContext
 -(id)init
