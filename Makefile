@@ -3,6 +3,7 @@ OCFLAGS = \
  	-fconstant-string-class=NSConstantString \
  	-std=c11 \
  	-I/home/icey/program/c4/gnustep-libobjc2/include \
+ 	-I/home/icey/program/c4/gnustep-make/include \
  	-fobjc-arc
 
 INCLUDE_FILES = \
@@ -28,7 +29,9 @@ OCSDLTest: Main.o Application.o libOCSDL.a
 		-o OCSDLTest \
 		-L. \
 		-L/home/icey/program/c4/gnustep-libobjc2/lib \
+		-L/home/icey/program/c4/gnustep-make/lib \
 		-lobjc \
+		-lgnustep-base \
 		-fconstant-string-class=NSConstantString \
 		-lSDL2 \
 		-lOCSDL
