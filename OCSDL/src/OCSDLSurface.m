@@ -1,5 +1,5 @@
-#import "OCSDLSurface.h"
-#import "OCUtil.h"
+#import "../include/OCSDLSurface.h"
+#import "../include/OCUtil.h"
 
 @implementation OCSDLSurface
 -(id)initWithWindow:(SDL_Window*)window sinkrate:(Sinkrate)sinkrate

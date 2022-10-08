@@ -1,5 +1,5 @@
-#import "OCSDLEvent.h"
-#import "OCUtil.h"
+#import "../include/OCSDLEvent.h"
+#import "../include/OCUtil.h"
 
 @implementation OCSDLEvent : NSObject
 
