@@ -11,6 +11,7 @@ link_directories(${GNUSTEP_PATH}/lib)
 add_library(
         OCSDL
         OCSDL/src/OCSDL.m
+        OCSDL/src/OCSDLBase.m
         OCSDL/src/OCSDLEvent.m
         OCSDL/src/OCSDLSurface.m
         OCSDL/src/OCSDLWindow.m

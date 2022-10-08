@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
-
-#include <SDL2/SDL.h>
-#include "Sinkrate.h"
+#import <SDL2/SDL.h>
+#import "Sinkrate.h"
 
 @interface OCSDLEvent : NSObject
 {

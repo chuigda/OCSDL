@@ -24,9 +24,9 @@
       }
 
       surface = [[OCSDLSurface alloc]
-         initWithWindow:window
-               sinkrate:SecretInternalsDoNotUseOrYouWillBeFired];
-      [surface fillRectRGB:NULL r:0xFF g:0xFF b:0xFF];
+                 initFromNative:SDL_GetWindowSurface(window)
+                        isOwned:false];
+      [surface fillRect:NULL r:0xFF g:0xFF b:0xFF];
    })
 }
 

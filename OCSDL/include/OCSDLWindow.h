@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
+#import <SDL2/SDL.h>
 #import "OCSDLSurface.h"
-
-#include <SDL2/SDL.h>
 
 @interface OCSDLWindow : NSObject
 {

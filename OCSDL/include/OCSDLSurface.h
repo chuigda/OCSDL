@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
-
-#include <SDL2/SDL.h>
-#include "Sinkrate.h"
+#import <SDL2/SDL.h>
+#import "OCSDLBase.h"
 
 @interface OCSDLSurface : NSObject
 {
@@ -9,10 +8,14 @@
    BOOL isOwnedSurface;
 }
 
--(id)initWithWindow:(SDL_Window*)window sinkrate:(Sinkrate)sinkrate;
+-(id)initFromNative:(SDL_Surface*)surface isOwned:(BOOL)isOwned;
 -(id)initWithBMP:(NSString*)fileName;
 -(void)dealloc;
 
--(void)fillRectRGB:(SDL_Rect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
--(void)blit:(OCSDLSurface*)src dstRect:(SDL_Rect*)dstRect srcRect:(SDL_Rect*)srcRect;
+-(SDL_PixelFormat*)pixelFormat;
+-(void)fillRect:(OCSDLRect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
+-(void)fillRect:(OCSDLRect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b a:(uint8_t)a;
+-(void)blit:(OCSDLSurface*)src dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect;
+-(void)blitScaled:(OCSDLSurface*)src dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect;
+-(OCSDLSurface*)convert:(SDL_PixelFormat*)targetFormat;
 @end
