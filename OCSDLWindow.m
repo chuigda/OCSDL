@@ -40,10 +40,11 @@
    SDL_UpdateWindowSurface(window);
 }
 
-OC_DEALLOC_BOILERPLATE({
+-(void)dealloc
+{
    NSLog(@"deallocating window");
    SDL_DestroyWindow(window);
-})
+}
 
 @end
 

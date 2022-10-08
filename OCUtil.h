@@ -7,11 +7,3 @@
       CODE                        \
    }                              \
    return self;
-
-#define OC_DEALLOC_BOILERPLATE(CODE) \
-   -(void)dealloc                    \
-   {                                 \
-      {                              \
-         CODE                        \
-      }                              \
-   }

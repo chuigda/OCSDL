@@ -19,8 +19,9 @@
    return [OCSDLEvent fromNative:e];
 }
 
-OC_DEALLOC_BOILERPLATE({
+-(void)dealloc
+{
    NSLog(@"OCSDL: uninitializing SDL context");
    SDL_Quit();
-})
+}
 @end

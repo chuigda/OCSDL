@@ -31,11 +31,12 @@
    SDL_BlitSurface(src->surface, srcRect, surface, dstRect);
 }
 
-OC_DEALLOC_BOILERPLATE({
+-(void)dealloc
+{
    if (isOwnedSurface) {
       NSLog(@"deallocating surface resource");
       SDL_FreeSurface(surface);
    }
-})
+}
 
 @end
