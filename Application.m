@@ -3,6 +3,7 @@
 #import "OCSDL.h"
 #import "OCSDLRenderer.h"
 #import "OCSDLTexture.h"
+#import "OCSDLSprite.h"
 
 @implementation Application
 +(int)main:(NSArray*)args
@@ -14,10 +15,12 @@
                         height:480];
    OCSDLRenderer *renderer = [[OCSDLRenderer alloc]
                               initFromWindow:window];
-   OCSDLTexture *texture1 = [[OCSDLTexture alloc]
-                             init:renderer
-                        withImage:@"test1.bmp"];
-   OCSDLRect *imageRect = [[OCSDLRect alloc] initX:320 - 32 y:240 - 32 w:64 h:64];
+   OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
+                                  init:renderer
+                             withImage:@"sprite.png"];
+   NSArray *sprites = [spriteTexture spriteSplit:OC_SDL_ROW count:6];
+   int currentImage = 0;
+
    for (;;) {
       OCSDLEvent *e = [ctx pollEvent];
       if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
@@ -30,30 +33,23 @@
             case SDLK_ESCAPE:
                return 0;
             case SDLK_LEFT:
-               imageRect.x -= 5;
+               currentImage -= 1;
                break;
             case SDLK_RIGHT:
-               imageRect.x += 5;
-               break;
-            case SDLK_UP:
-               imageRect.y -= 5;
-               break;
-            case SDLK_DOWN:
-               imageRect.y += 5;
+               currentImage += 1;
                break;
          }
+         if (currentImage > 5) {
+            currentImage = 0;
+         } else if (currentImage < 0) {
+            currentImage = 5;
+         }
       }
-      OCSDLRect *borderRect = [imageRect copy];
-      borderRect.w += 4;
-      borderRect.h += 4;
-      borderRect.x -= 2;
-      borderRect.y -= 2;
 
-      [renderer setColorR:0x00 g:0x00 b:0x00];
+      OCSDLSprite *sprite = [sprites objectAtIndex:currentImage];
+
       [renderer clear];
-      [renderer setColorR:0xcd g:0x00 b:0x00];
-      [renderer fillRect:borderRect];
-      [renderer renderCopy:texture1 dstRect:imageRect srcRect:nil];
+      [renderer renderSprite:sprite pos:(OCSDLPoint) { 320, 240 }];
       [renderer present];
    }
    return 0;

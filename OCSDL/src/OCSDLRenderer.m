@@ -1,6 +1,7 @@
 #import "OCSDLRenderer.h"
 #import "OCUtil.h"
 #import "OCSDLTexture.h"
+#import "OCSDLSprite.h"
 
 @implementation OCSDLRenderer
 -(id)initFromWindow:(OCSDLWindow*)nativeWindow
@@ -41,6 +42,20 @@
                   [texture nativeHandle],
                   srcRect ? [srcRect nativeHandle] : NULL,
                   dstRect ? [dstRect nativeHandle] : NULL);
+}
+
+-(void)renderSprite:(OCSDLSprite*)sprite pos:(OCSDLPoint)pos {
+   OCSDLRect *spriteRect = [sprite rect];
+   OCSDLRect *renderRect = [spriteRect copy];
+   OCSDLPoint spriteCentre = [sprite center];
+
+   renderRect.x = pos.x - spriteCentre.x;
+   renderRect.y = pos.y - spriteCentre.y;
+
+   SDL_RenderCopy(renderer,
+                  [[sprite texture] nativeHandle],
+                  [spriteRect nativeHandle],
+                  [renderRect nativeHandle]);
 }
 
 -(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b

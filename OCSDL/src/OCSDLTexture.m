@@ -84,8 +84,8 @@
    if (order == OC_SDL_COL) {
       for (int col = 0; col < cols; col++) {
          for (int row = 0; row < rows; row++) {
-            int x = cx + width * col;
-            int y = cy * height * row;
+            int x = width * col;
+            int y = height * row;
             [ret addObject:[[OCSDLSprite alloc] init:self
                                                 rect:[[OCSDLRect alloc] initX:x
                                                                             y:y
@@ -97,8 +97,8 @@
    } else {
       for (int row = 0; row < rows; row++) {
          for (int col = 0; col < cols; col++) {
-            int x = cx + width * col;
-            int y = cy * height * row;
+            int x = width * col;
+            int y = height * row;
             [ret addObject:[[OCSDLSprite alloc] init:self
                                                 rect:[[OCSDLRect alloc] initX:x
                                                                             y:y
