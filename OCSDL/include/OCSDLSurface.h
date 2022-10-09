@@ -6,10 +6,11 @@
 {
    SDL_Surface *surface;
    BOOL isOwnedSurface;
+   NSObject *gcAnchor;
 }
 
--(id)initFromNative:(SDL_Surface*)surface isOwned:(BOOL)isOwned;
--(id)initWithBMP:(NSString*)fileName;
+-(id)initFromNative:(SDL_Surface*)surface isOwned:(BOOL)isOwned gcAnchor:(NSObject*)anchor;
+-(id)initWithImage:(NSString*)fileName;
 -(void)dealloc;
 
 -(SDL_PixelFormat*)pixelFormat;

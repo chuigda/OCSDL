@@ -5,12 +5,12 @@
 @interface OCSDLWindow : NSObject
 {
    SDL_Window *window;
-   OCSDLSurface *surface;
 }
 
 -(id)init:(NSString*)title width:(int)width height:(int)height;
 -(OCSDLSurface*)surface;
 -(void)updateWindowSurface;
+-(SDL_Window*)nativeHandle;
 -(void)dealloc;
 
 @end

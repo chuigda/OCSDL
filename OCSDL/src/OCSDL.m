@@ -1,3 +1,4 @@
+#import <SDL2/SDL_image.h>
 #import "OCSDL.h"
 #import "OCUtil.h"
 
@@ -22,6 +23,7 @@
 -(void)dealloc
 {
    NSLog(@"OCSDL: uninitializing SDL context");
+   IMG_Quit();
    SDL_Quit();
 }
 @end

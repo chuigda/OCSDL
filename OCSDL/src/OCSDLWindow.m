@@ -22,22 +22,25 @@
                SDL_GetError());
          return nil;
       }
-
-      surface = [[OCSDLSurface alloc]
-                 initFromNative:SDL_GetWindowSurface(window)
-                        isOwned:false];
-      [surface fillRect:NULL r:0xFF g:0xFF b:0xFF];
    })
 }
 
 -(OCSDLSurface*)surface
 {
-   return surface;
+   return [[OCSDLSurface alloc]
+           initFromNative:SDL_GetWindowSurface(window)
+                  isOwned:false
+                 gcAnchor:self];
 }
 
 -(void)updateWindowSurface
 {
    SDL_UpdateWindowSurface(window);
+}
+
+-(SDL_Window*)nativeHandle;
+{
+   return window;
 }
 
 -(void)dealloc
@@ -47,4 +50,3 @@
 }
 
 @end
-

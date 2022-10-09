@@ -14,6 +14,8 @@ add_library(
         OCSDL/src/OCSDLBase.m
         OCSDL/src/OCSDLEvent.m
         OCSDL/src/OCSDLSurface.m
+        OCSDL/src/OCSDLRenderer.m
+        OCSDL/src/OCSDLTexture.m
         OCSDL/src/OCSDLWindow.m
 )
 include_directories(OCSDL/include)
@@ -24,4 +26,4 @@ add_executable(
         Application.m
 )
 
-target_link_libraries(TestOCSDL OCSDL objc gnustep-base SDL2)
+target_link_libraries(TestOCSDL OCSDL objc gnustep-base SDL2 SDL2_image)

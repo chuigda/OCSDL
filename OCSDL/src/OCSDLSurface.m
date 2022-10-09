@@ -1,20 +1,21 @@
+#import <SDL2/SDL_image.h>
 #import "OCSDLSurface.h"
 #import "OCUtil.h"
 
 @implementation OCSDLSurface
-
--(id)initFromNative:(SDL_Surface*)nativeSurface isOwned:(BOOL)isOwned
+-(id)initFromNative:(SDL_Surface*)nativeSurface isOwned:(BOOL)isOwned gcAnchor:(NSObject*)anchor
 {
    OC_INIT_BOILERPLATE({
       surface = nativeSurface;
       isOwnedSurface = isOwned;
+      gcAnchor = anchor;
    })
 }
 
--(id)initWithBMP:(NSString*)fileName
+-(id)initWithImage:(NSString*)fileName
 {
    OC_INIT_BOILERPLATE({
-      surface = SDL_LoadBMP([fileName cString]);
+      surface = IMG_Load([fileName cString]);
       isOwnedSurface = true;
       if (!surface) {
          return nil;
@@ -67,7 +68,7 @@
 -(OCSDLSurface*)convert:(SDL_PixelFormat*)targetFormat
 {
    SDL_Surface *converted = SDL_ConvertSurface(surface, targetFormat, 0);
-   return [[OCSDLSurface alloc] initFromNative:converted isOwned:true];
+   return [[OCSDLSurface alloc] initFromNative:converted isOwned:true gcAnchor:nil];
 }
 
 @end
