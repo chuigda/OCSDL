@@ -30,9 +30,19 @@
    }
 }
 
+-(SDL_Surface*)nativeHandle
+{
+   return surface;
+}
+
 -(SDL_PixelFormat*)pixelFormat
 {
    return surface->format;
+}
+
+-(void)setColorKeyR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b
+{
+   SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, r, g, b));
 }
 
 -(void)fillRect:(OCSDLRect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b

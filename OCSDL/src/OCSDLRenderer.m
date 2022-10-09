@@ -31,7 +31,12 @@
    SDL_RenderPresent(renderer);
 }
 
--(void)renderCopy:(OCSDLTexture *)texture dstRect:(OCSDLRect *)dstRect srcRect:(OCSDLRect *)srcRect {
+-(void)setViewport:(OCSDLRect*)viewport
+{
+   SDL_RenderSetViewport(renderer, viewport ? [viewport nativeHandle] : NULL);
+}
+
+-(void)renderCopy:(OCSDLTexture*)texture dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect {
    SDL_RenderCopy(renderer,
                   [texture nativeHandle],
                   srcRect ? [srcRect nativeHandle] : NULL,

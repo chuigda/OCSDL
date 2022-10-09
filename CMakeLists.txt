@@ -16,6 +16,7 @@ add_library(
         OCSDL/src/OCSDLSurface.m
         OCSDL/src/OCSDLRenderer.m
         OCSDL/src/OCSDLTexture.m
+        OCSDL/src/OCSDLSprite.m
         OCSDL/src/OCSDLWindow.m
 )
 include_directories(OCSDL/include)

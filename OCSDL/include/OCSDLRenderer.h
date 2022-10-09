@@ -16,6 +16,7 @@
 -(SDL_Renderer*)nativeHandle;
 -(void)clear;
 -(void)present;
+-(void)setViewport:(OCSDLRect*)viewport;
 -(void)renderCopy:(OCSDLTexture*)texture dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect;
 -(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
 -(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b a:(uint8_t)a;

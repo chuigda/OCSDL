@@ -13,7 +13,9 @@
 -(id)initWithImage:(NSString*)fileName;
 -(void)dealloc;
 
+-(SDL_Surface*)nativeHandle;
 -(SDL_PixelFormat*)pixelFormat;
+-(void)setColorKeyR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
 -(void)fillRect:(OCSDLRect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
 -(void)fillRect:(OCSDLRect*)rect r:(uint8_t)r g:(uint8_t)g b:(uint8_t)b a:(uint8_t)a;
 -(void)blit:(OCSDLSurface*)src dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect;

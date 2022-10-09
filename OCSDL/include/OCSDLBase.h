@@ -1,10 +1,12 @@
 #import <Foundation/Foundation.h>
 #import <SDL2/SDL_rect.h>
 
-typedef struct {
-   int x;
-   int y;
-} OCSDLPoint;
+typedef SDL_Point OCSDLPoint;
+
+typedef enum {
+   OC_SDL_ROW,
+   OC_SDL_COL
+} OCSDLRowColOrder;
 
 @interface OCSDLRect : NSObject
 {
