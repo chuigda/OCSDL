@@ -1,0 +1,16 @@
+= OCSDL
+author: chuigda<icey@icey.tech>
+
+(Completely useless) SDL wrapper for Objective-C
+
+（毫无卵用的）Objective-C SDL 包装器
+
+== TL;DR
+
+Don't use this library.
+
+别用。
+
+It is both theoretically and practically completely ok to directly issue conventional SDL C API calls within ObjC context, thus a wrapper is not necessary. The project configuration file (i.e. `CMakeLists.txt`) is of poor quality, making the project suitable for almost no environment but my own computer. Also, don't try learning either SDL or ObjC via this project, because I'm completely newbie to them both.
+
+从理论上和实践上来说，直接在 ObjC 里使用常规的 SDL C API 是完全可行的，所以没必要非得弄个包装器。项目的工程文件（也就是 `CMakeLists.txt`）写的很烂，以至于离了我的电脑这项目可能就没法编译了。另外也别指望看这个仓库学 SDL 或者 ObjC，因为我两样都写的挺菜。
