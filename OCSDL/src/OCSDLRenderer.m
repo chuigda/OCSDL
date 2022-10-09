@@ -8,7 +8,9 @@
 {
    OC_INIT_BOILERPLATE({
       self->window = nativeWindow;
-      renderer = SDL_CreateRenderer([window nativeHandle], -1, SDL_RENDERER_ACCELERATED);
+      renderer = SDL_CreateRenderer([window nativeHandle],
+                                    -1,
+                                    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
    })
 }
 
@@ -37,14 +39,32 @@
    SDL_RenderSetViewport(renderer, viewport ? [viewport nativeHandle] : NULL);
 }
 
--(void)renderCopy:(OCSDLTexture*)texture dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect {
+-(void)renderCopy:(OCSDLTexture*)texture dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect
+{
    SDL_RenderCopy(renderer,
                   [texture nativeHandle],
                   srcRect ? [srcRect nativeHandle] : NULL,
                   dstRect ? [dstRect nativeHandle] : NULL);
 }
 
--(void)renderSprite:(OCSDLSprite*)sprite pos:(OCSDLPoint)pos {
+-(void)renderCopy:(OCSDLTexture*)texture
+          dstRect:(OCSDLRect*)dstRect
+          srcRect:(OCSDLRect*)srcRect
+         rotation:(double)rotation
+           center:(OCSDLPoint*)center
+             flip:(SDL_RendererFlip)flip
+{
+   SDL_RenderCopyEx(renderer,
+                    [texture nativeHandle],
+                    srcRect ? [srcRect nativeHandle] : NULL,
+                    dstRect ? [dstRect nativeHandle] : NULL,
+                    rotation,
+                    center,
+                    flip);
+}
+
+-(void)renderSprite:(OCSDLSprite*)sprite pos:(OCSDLPoint)pos
+{
    OCSDLRect *spriteRect = [sprite rect];
    OCSDLRect *renderRect = [spriteRect copy];
    OCSDLPoint spriteCentre = [sprite center];
@@ -52,10 +72,27 @@
    renderRect.x = pos.x - spriteCentre.x;
    renderRect.y = pos.y - spriteCentre.y;
 
-   SDL_RenderCopy(renderer,
-                  [[sprite texture] nativeHandle],
-                  [spriteRect nativeHandle],
-                  [renderRect nativeHandle]);
+   [self renderCopy:[sprite texture] dstRect:renderRect srcRect:spriteRect];
+}
+
+-(void)renderSprite:(OCSDLSprite*)sprite
+                pos:(OCSDLPoint)pos
+           rotation:(double)rotation
+               flip:(SDL_RendererFlip)flip
+{
+   OCSDLRect *spriteRect = [sprite rect];
+   OCSDLRect *renderRect = [spriteRect copy];
+   OCSDLPoint spriteCentre = [sprite center];
+
+   renderRect.x = pos.x - spriteCentre.x;
+   renderRect.y = pos.y - spriteCentre.y;
+
+   [self renderCopy:[sprite texture]
+            dstRect:renderRect
+            srcRect:spriteRect
+           rotation:rotation
+             center:&spriteCentre
+               flip:flip];
 }
 
 -(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b

@@ -20,6 +20,8 @@
                              withImage:@"sprite.png"];
    NSArray *sprites = [spriteTexture spriteSplit:OC_SDL_ROW count:6];
    int currentImage = 0;
+   OCSDLPoint pos = { 320, 240 };
+   SDL_RendererFlip flip = SDL_FLIP_NONE;
 
    for (;;) {
       OCSDLEvent *e = [ctx pollEvent];
@@ -33,23 +35,25 @@
             case SDLK_ESCAPE:
                return 0;
             case SDLK_LEFT:
-               currentImage -= 1;
+               flip = SDL_FLIP_HORIZONTAL;
+               pos.x -= 3;
                break;
             case SDLK_RIGHT:
-               currentImage += 1;
+               flip = SDL_FLIP_NONE;
+               pos.x += 3;
                break;
          }
+
+         currentImage += 1;
          if (currentImage > 5) {
             currentImage = 0;
-         } else if (currentImage < 0) {
-            currentImage = 5;
          }
       }
 
       OCSDLSprite *sprite = [sprites objectAtIndex:currentImage];
 
       [renderer clear];
-      [renderer renderSprite:sprite pos:(OCSDLPoint) { 320, 240 }];
+      [renderer renderSprite:sprite pos:pos rotation:0.0 flip:flip];
       [renderer present];
    }
    return 0;
