@@ -17,4 +17,9 @@
 -(void)clear;
 -(void)present;
 -(void)renderCopy:(OCSDLTexture*)texture dstRect:(OCSDLRect*)dstRect srcRect:(OCSDLRect*)srcRect;
+-(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b;
+-(void)setColorR:(uint8_t)r g:(uint8_t)g b:(uint8_t)b a:(uint8_t)a;
+-(void)fillRect:(OCSDLRect*)rect;
+-(void)drawLine:(OCSDLPoint)fromPoint to:(OCSDLPoint)toPoint;
+-(void)drawPoint:(OCSDLPoint)point;
 @end

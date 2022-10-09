@@ -1,6 +1,11 @@
 #import <Foundation/Foundation.h>
 #import <SDL2/SDL_rect.h>
 
+typedef struct {
+   int x;
+   int y;
+} OCSDLPoint;
+
 @interface OCSDLRect : NSObject
 {
    SDL_Rect inner;
@@ -15,4 +20,5 @@
 -(id)initX:(int)x y:(int)y w:(int)w h:(int)h;
 -(id)initW:(int)w h:(int)h;
 -(SDL_Rect*)nativeHandle;
+-(id)copy;
 @end

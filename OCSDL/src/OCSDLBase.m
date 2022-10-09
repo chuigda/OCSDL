@@ -38,4 +38,9 @@
    return &inner;
 }
 
+-(id)copy
+{
+   return [[OCSDLRect alloc] initX:self.x y:self.y w:self.w h:self.h];
+}
+
 @end
