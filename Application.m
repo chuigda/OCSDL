@@ -8,6 +8,8 @@
 @implementation Application
 +(int)main:(NSArray*)args
 {
+   (void)args;
+
    OCSDLContext *ctx = [[OCSDLContext alloc] init];
    OCSDLWindow *window = [[OCSDLWindow alloc]
                           init:@"SDL test"
@@ -33,66 +35,63 @@
    OCSDLPoint pos = { 320, 240 };
 
    for (;;) {
-      OCSDLEvent *e = [ctx pollEvent];
-      if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
-         break;
+      [renderer clear];
+
+      OCSDLEvent *e;
+      while ((e = [ctx pollEvent])) {
+         if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
+            return 0;
+         }
+
+         if ([e isKindOfClass:[OCSDLKeyboardEvent class]]) {
+            OCSDLKeyboardEvent *keyboardEvent = (OCSDLKeyboardEvent *) e;
+            switch ([keyboardEvent keysym].sym) {
+               case SDLK_ESCAPE:
+                  return 0;
+
+               case SDLK_LEFT:
+                  if (currentSprite != walkLeftSprites) {
+                     currentSprite = walkLeftSprites;
+                     currentImage = 0;
+                  }
+                  pos.x -= 8;
+                  break;
+               case SDLK_RIGHT:
+                  if (currentSprite != walkRightSprites) {
+                     currentSprite = walkRightSprites;
+                     currentImage = 0;
+                  }
+                  pos.x += 8;
+                  break;
+               case SDLK_UP:
+                  if (currentSprite != walkBackSprites) {
+                     currentSprite = walkBackSprites;
+                     currentImage = 0;
+                  }
+                  pos.y -= 10;
+                  break;
+               case SDLK_DOWN:
+                  if (currentSprite != walkFrontSprites) {
+                     currentSprite = walkFrontSprites;
+                     currentImage = 0;
+                  }
+                  pos.y += 10;
+                  break;
+            }
+            break;
+         }
       }
 
-      if ([e isKindOfClass:[OCSDLKeyboardEvent class]]) {
-         OCSDLKeyboardEvent *keyboardEvent = (OCSDLKeyboardEvent*)e;
-         switch ([keyboardEvent keysym].sym) {
-            case SDLK_ESCAPE:
-               return 0;
-
-            case SDLK_LEFT:
-               if (currentSprite != walkLeftSprites) {
-                  currentSprite = walkLeftSprites;
-                  currentImage = 0;
-               } else {
-                  currentImage += 1;
-               }
-               pos.x -= 8;
-               break;
-            case SDLK_RIGHT:
-               if (currentSprite != walkRightSprites) {
-                  currentSprite = walkRightSprites;
-                  currentImage = 0;
-               } else {
-                  currentImage += 1;
-               }
-               pos.x += 8;
-               break;
-            case SDLK_UP:
-               if (currentSprite != walkBackSprites) {
-                  currentSprite = walkBackSprites;
-                  currentImage = 0;
-               } else {
-                  currentImage += 1;
-               }
-               pos.y -= 10;
-               break;
-            case SDLK_DOWN:
-               if (currentSprite != walkFrontSprites) {
-                  currentSprite = walkFrontSprites;
-                  currentImage = 0;
-               } else {
-                  currentImage += 1;
-               }
-               pos.y += 10;
-               break;
-         }
-
-         if (currentImage >= [currentSprite count]) {
-            currentImage = 0;
-         }
+      currentImage += 1;
+      if (currentImage >= [currentSprite count]) {
+         currentImage = 0;
       }
 
       OCSDLSprite *sprite = [currentSprite objectAtIndex:currentImage];
 
-      [renderer clear];
       [renderer renderSprite:sprite pos:pos];
       [renderer present];
+      SDL_Delay(50);
    }
-   return 0;
 }
 @end

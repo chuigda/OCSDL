@@ -10,7 +10,7 @@
       self->window = nativeWindow;
       renderer = SDL_CreateRenderer([window nativeHandle],
                                     -1,
-                                    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+                                    SDL_RENDERER_ACCELERATED);
    })
 }
 
