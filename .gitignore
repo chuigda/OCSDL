@@ -3,7 +3,6 @@
 *.a
 *.exe
 *.bmp
-*.png
 
 OCSDLTest
 cmake-build-*

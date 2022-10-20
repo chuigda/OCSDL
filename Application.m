@@ -91,7 +91,8 @@
 
       [renderer renderSprite:sprite pos:pos];
       [renderer present];
-      SDL_Delay(50);
+
+      SDL_Delay(32);
    }
 }
 @end
