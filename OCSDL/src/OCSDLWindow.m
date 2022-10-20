@@ -1,5 +1,8 @@
 #import "OCSDLWindow.h"
 #import "OCUtil.h"
+#import "OCSDLRenderer.h"
+#import "OCSDLEvent.h"
+#import "OCSDL.h"
 
 @implementation OCSDLWindow
 -(id)init:(NSString*)title width:(int)width height:(int)height

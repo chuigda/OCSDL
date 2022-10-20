@@ -1,98 +1,151 @@
 #import <Foundation/Foundation.h>
 #import "Application.h"
+
 #import "OCSDL.h"
+#import "OCSDLApplication.h"
 #import "OCSDLRenderer.h"
 #import "OCSDLTexture.h"
 #import "OCSDLSprite.h"
+
+@interface GameApplication : NSObject<OCSDLApplication>
+{
+   OCSDLRenderer *renderer;
+
+   NSArray *walkBackSprites;
+   NSArray *walkFrontSprites;
+   NSArray *walkLeftSprites;
+   NSArray *walkRightSprites;
+
+   NSArray *currentSprite;
+   int frameCounter;
+   int currentImage;
+   OCSDLPoint currentPos;
+}
+
+-(void)setWindow:(OCSDLWindow*)window setRenderer:(OCSDLRenderer*)renderer;
+-(void)prepare;
+-(void)beforePaint;
+-(void)paint;
+-(BOOL)handleQuitEvent:(OCSDLQuitEvent*)quitEvent;
+-(void)handleKeyboardEvent:(OCSDLKeyboardEvent*)keyboardEvent;
+-(void)updateFrame;
+
+-(int)targetFrameRate;
+@end
+
+@implementation GameApplication
+-(void)setWindow:(OCSDLWindow*)window1 setRenderer:(OCSDLRenderer*)renderer1
+{
+   (void)window1;
+   renderer = renderer1;
+}
+
+-(void)prepare
+{
+   OCSDLSurface *spriteSurface = [[OCSDLSurface alloc]
+                                  initWithImage:@"./Sprites/Cirno.png"];
+   [spriteSurface setColorKeyR:0xff g:0x00 b:0xff];
+
+   OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
+                                  init:renderer
+                           fromSurface:spriteSurface];
+   NSArray *sprites = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
+
+   walkBackSprites = [sprites subarrayWithRange:NSMakeRange(0, 6)];
+   walkFrontSprites = [sprites subarrayWithRange:NSMakeRange(6, 6)];
+   walkLeftSprites = [sprites subarrayWithRange:NSMakeRange(12, 6)];
+   walkRightSprites = [sprites subarrayWithRange:NSMakeRange(18, 6)];
+
+   currentSprite = walkFrontSprites;
+   currentImage = 0;
+   currentPos = (OCSDLPoint) { 320, 240 };
+}
+
+-(void)beforePaint
+{
+   [renderer clear];
+}
+
+-(void)paint
+{
+   OCSDLSprite *sprite = [currentSprite objectAtIndex:currentImage];
+   [renderer renderSprite:sprite pos:currentPos];
+   [renderer present];
+}
+
+-(BOOL)handleQuitEvent:(OCSDLQuitEvent*)quitEvent
+{
+   return true;
+}
+
+-(void)handleKeyboardEvent:(OCSDLKeyboardEvent*)keyboardEvent
+{
+   switch ([keyboardEvent keysym].sym) {
+      case SDLK_LEFT:
+         if (currentSprite != walkLeftSprites) {
+            currentSprite = walkLeftSprites;
+            frameCounter = 0;
+            currentImage = 0;
+         }
+         currentPos.x -= 4;
+         break;
+      case SDLK_RIGHT:
+         if (currentSprite != walkRightSprites) {
+            currentSprite = walkRightSprites;
+            frameCounter = 0;
+            currentImage = 0;
+         }
+         currentPos.x += 4;
+         break;
+      case SDLK_UP:
+         if (currentSprite != walkBackSprites) {
+            currentSprite = walkBackSprites;
+            frameCounter = 0;
+            currentImage = 0;
+         }
+         currentPos.y -= 5;
+         break;
+      case SDLK_DOWN:
+         if (currentSprite != walkFrontSprites) {
+            currentSprite = walkFrontSprites;
+            frameCounter = 0;
+            currentImage = 0;
+         }
+         currentPos.y += 5;
+         break;
+   }
+}
+
+-(void)updateFrame
+{
+   frameCounter += 1;
+   if (frameCounter >= 4) {
+      frameCounter = 0;
+      currentImage += 1;
+      if (currentImage >= [currentSprite count]) {
+         currentImage = 0;
+      }
+   }
+}
+
+-(int)targetFrameRate
+{
+   return 30;
+}
+@end
 
 @implementation Application
 +(int)main:(NSArray*)args
 {
    (void)args;
 
-   OCSDLContext *ctx = [[OCSDLContext alloc] init];
-   OCSDLWindow *window = [[OCSDLWindow alloc]
-                          init:@"SDL test"
-                         width:640
-                        height:480];
-   OCSDLRenderer *renderer = [[OCSDLRenderer alloc]
-                              initFromWindow:window];
-   OCSDLSurface *spriteSurface = [[OCSDLSurface alloc]
-                                  initWithImage:@"./Sprites/Cirno.png"];
-   [spriteSurface setColorKeyR:0xff g:0x00 b:0xff];
-   OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
-                                  init:renderer
-                           fromSurface:spriteSurface];
-   NSArray *sprites = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
+   GameApplication *application = [[GameApplication alloc] init];
+   OCSDLExecutor *executor = [[OCSDLExecutor alloc]
+                              init:@"OCSDL Testing window"
+                       windowWidth:640
+                      windowHeight:480];
+   [executor runApplication:application];
 
-   NSArray *walkBackSprites = [sprites subarrayWithRange:NSMakeRange(0, 6)];
-   NSArray *walkFrontSprites = [sprites subarrayWithRange:NSMakeRange(6, 6)];
-   NSArray *walkLeftSprites = [sprites subarrayWithRange:NSMakeRange(12, 6)];
-   NSArray *walkRightSprites = [sprites subarrayWithRange:NSMakeRange(18, 6)];
-
-   NSArray *currentSprite = walkFrontSprites;
-   int currentImage = 0;
-   OCSDLPoint pos = { 320, 240 };
-
-   for (;;) {
-      [renderer clear];
-
-      OCSDLEvent *e;
-      while ((e = [ctx pollEvent])) {
-         if ([e isKindOfClass:[OCSDLQuitEvent class]]) {
-            return 0;
-         }
-
-         if ([e isKindOfClass:[OCSDLKeyboardEvent class]]) {
-            OCSDLKeyboardEvent *keyboardEvent = (OCSDLKeyboardEvent *) e;
-            switch ([keyboardEvent keysym].sym) {
-               case SDLK_ESCAPE:
-                  return 0;
-
-               case SDLK_LEFT:
-                  if (currentSprite != walkLeftSprites) {
-                     currentSprite = walkLeftSprites;
-                     currentImage = 0;
-                  }
-                  pos.x -= 8;
-                  break;
-               case SDLK_RIGHT:
-                  if (currentSprite != walkRightSprites) {
-                     currentSprite = walkRightSprites;
-                     currentImage = 0;
-                  }
-                  pos.x += 8;
-                  break;
-               case SDLK_UP:
-                  if (currentSprite != walkBackSprites) {
-                     currentSprite = walkBackSprites;
-                     currentImage = 0;
-                  }
-                  pos.y -= 10;
-                  break;
-               case SDLK_DOWN:
-                  if (currentSprite != walkFrontSprites) {
-                     currentSprite = walkFrontSprites;
-                     currentImage = 0;
-                  }
-                  pos.y += 10;
-                  break;
-            }
-            break;
-         }
-      }
-
-      currentImage += 1;
-      if (currentImage >= [currentSprite count]) {
-         currentImage = 0;
-      }
-
-      OCSDLSprite *sprite = [currentSprite objectAtIndex:currentImage];
-
-      [renderer renderSprite:sprite pos:pos];
-      [renderer present];
-
-      SDL_Delay(32);
-   }
+   return 0;
 }
 @end

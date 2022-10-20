@@ -16,7 +16,9 @@
 -(OCSDLEvent*)pollEvent
 {
    SDL_Event e;
-   SDL_PollEvent(&e);
+   if (!SDL_PollEvent(&e)) {
+      return nil;
+   }
    return [OCSDLEvent fromNative:e];
 }
 
