@@ -110,6 +110,11 @@
    SDL_RenderFillRect(renderer, rect ? [rect nativeHandle] : NULL);
 }
 
+-(void)strokeRect:(OCSDLRect*)rect
+{
+   SDL_RenderDrawRect(renderer, rect ? [rect nativeHandle] : NULL);
+}
+
 -(void)drawLine:(OCSDLPoint)fromPoint to:(OCSDLPoint)toPoint
 {
    SDL_RenderDrawLine(renderer, fromPoint.x, fromPoint.y, toPoint.x, toPoint.y);

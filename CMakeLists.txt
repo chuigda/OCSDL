@@ -24,8 +24,9 @@ include_directories(OCSDL/include)
 
 add_executable(
         TestOCSDL
-        Main.m
-        Application.m
+        SampleApplication/Main.m
+        SampleApplication/Application.m
+        SampleApplication/Sprite.m
 )
 
 target_link_libraries(TestOCSDL OCSDL objc gnustep-base SDL2 SDL2_image)

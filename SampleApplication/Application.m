@@ -1,25 +1,18 @@
 #import <Foundation/Foundation.h>
-#import "Application.h"
 
 #import "OCSDL.h"
 #import "OCSDLApplication.h"
 #import "OCSDLRenderer.h"
 #import "OCSDLTexture.h"
-#import "OCSDLSprite.h"
+
+#import "Application.h"
+#import "Sprite.h"
 
 @interface GameApplication : NSObject<OCSDLApplication>
 {
    OCSDLRenderer *renderer;
 
-   NSArray *walkBackSprites;
-   NSArray *walkFrontSprites;
-   NSArray *walkLeftSprites;
-   NSArray *walkRightSprites;
-
-   NSArray *currentSprite;
-   int frameCounter;
-   int currentImage;
-   OCSDLPoint currentPos;
+   Sprite *playerSprite;
 }
 
 -(void)setWindow:(OCSDLWindow*)window setRenderer:(OCSDLRenderer*)renderer;
@@ -49,27 +42,33 @@
    OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
                                   init:renderer
                            fromSurface:spriteSurface];
-   NSArray *sprites = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
+   NSArray *frames = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
 
-   walkBackSprites = [sprites subarrayWithRange:NSMakeRange(0, 6)];
-   walkFrontSprites = [sprites subarrayWithRange:NSMakeRange(6, 6)];
-   walkLeftSprites = [sprites subarrayWithRange:NSMakeRange(12, 6)];
-   walkRightSprites = [sprites subarrayWithRange:NSMakeRange(18, 6)];
+   NSArray *walkBackFrames = [frames subarrayWithRange:NSMakeRange(0, 6)];
+   NSArray *walkFrontFrames = [frames subarrayWithRange:NSMakeRange(6, 6)];
+   NSArray *walkLeftFrames = [frames subarrayWithRange:NSMakeRange(12, 6)];
+   NSArray *walkRightFrames = [frames subarrayWithRange:NSMakeRange(18, 6)];
 
-   currentSprite = walkFrontSprites;
-   currentImage = 0;
-   currentPos = (OCSDLPoint) { 320, 240 };
+   NSArray *frameSets = [[NSArray alloc]
+                         initWithObjects:walkBackFrames, walkFrontFrames, walkLeftFrames, walkRightFrames, nil];
+
+   playerSprite = [[Sprite alloc] init:frameSets];
+
+   OCSDLPoint point;
+   point.x = 320;
+   point.y = 240;
+   [playerSprite setPosition:point];
 }
 
 -(void)beforePaint
 {
+   [renderer setColorR:0x00 g:0x00 b:0x00];
    [renderer clear];
 }
 
 -(void)paint
 {
-   OCSDLSprite *sprite = [currentSprite objectAtIndex:currentImage];
-   [renderer renderSprite:sprite pos:currentPos];
+   [playerSprite render:renderer];
    [renderer present];
 }
 
@@ -82,50 +81,23 @@
 {
    switch ([keyboardEvent keysym].sym) {
       case SDLK_LEFT:
-         if (currentSprite != walkLeftSprites) {
-            currentSprite = walkLeftSprites;
-            frameCounter = 0;
-            currentImage = 0;
-         }
-         currentPos.x -= 4;
+         [playerSprite orderToMove:MoveLeft];
          break;
       case SDLK_RIGHT:
-         if (currentSprite != walkRightSprites) {
-            currentSprite = walkRightSprites;
-            frameCounter = 0;
-            currentImage = 0;
-         }
-         currentPos.x += 4;
+         [playerSprite orderToMove:MoveRight];
          break;
       case SDLK_UP:
-         if (currentSprite != walkBackSprites) {
-            currentSprite = walkBackSprites;
-            frameCounter = 0;
-            currentImage = 0;
-         }
-         currentPos.y -= 5;
+         [playerSprite orderToMove:MoveBack];
          break;
       case SDLK_DOWN:
-         if (currentSprite != walkFrontSprites) {
-            currentSprite = walkFrontSprites;
-            frameCounter = 0;
-            currentImage = 0;
-         }
-         currentPos.y += 5;
+         [playerSprite orderToMove:MoveFront];
          break;
    }
 }
 
 -(void)updateFrame
 {
-   frameCounter += 1;
-   if (frameCounter >= 4) {
-      frameCounter = 0;
-      currentImage += 1;
-      if (currentImage >= [currentSprite count]) {
-         currentImage = 0;
-      }
-   }
+   [playerSprite update];
 }
 
 -(int)targetFrameRate
