@@ -3,7 +3,7 @@
 #import "OCSDLApplication.h"
 #import "OCSDLWindow.h"
 #import "OCSDLRenderer.h"
-#import "OCSDL.h"
+#import "OCSDLContext.h"
 #import "OCUtil.h"
 
 @implementation OCSDLExecutor

@@ -1,5 +1,5 @@
 #import <SDL2/SDL_image.h>
-#import "OCSDL.h"
+#import "OCSDLContext.h"
 #import "OCUtil.h"
 
 @implementation OCSDLContext

@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-#import "OCSDL.h"
+#import "OCSDLContext.h"
 #import "OCSDLApplication.h"
 #import "OCSDLRenderer.h"
 #import "OCSDLTexture.h"

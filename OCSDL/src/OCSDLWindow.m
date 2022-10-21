@@ -2,7 +2,7 @@
 #import "OCUtil.h"
 #import "OCSDLRenderer.h"
 #import "OCSDLEvent.h"
-#import "OCSDL.h"
+#import "OCSDLContext.h"
 
 @implementation OCSDLWindow
 -(id)init:(NSString*)title width:(int)width height:(int)height
