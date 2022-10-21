@@ -15,9 +15,6 @@ BOOL isVerticalMove(MoveDirection d);
    MoveDirection move;
    unsigned moveSteps;
 
-   BOOL hasPendingMove;
-   MoveDirection pendingMove;
-
    OCSDLPoint currentPos;
    unsigned frameCounter;
    unsigned currentFrameIdx;

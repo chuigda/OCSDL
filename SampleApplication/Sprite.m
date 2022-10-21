@@ -24,7 +24,6 @@ BOOL isVerticalMove(MoveDirection d) {
       spriteFrameSets = frameSets;
       spriteFrameSkip = frameSkip;
       isMoving = false;
-      hasPendingMove = false;
       currentFrameIdx = 0;
       frameCounter = 0;
    })
@@ -38,13 +37,12 @@ BOOL isVerticalMove(MoveDirection d) {
 -(void)orderToMove:(MoveDirection)moveDirection
 {
    if (isMoving) {
-      hasPendingMove = true;
-      pendingMove = moveDirection;
-   } else {
-      isMoving = true;
-      move = moveDirection;
-      moveSteps = 0;
+      return;
    }
+
+   isMoving = true;
+   move = moveDirection;
+   moveSteps = 0;
 }
 
 -(void)update
@@ -77,16 +75,8 @@ BOOL isVerticalMove(MoveDirection d) {
       if ((isHorizontalMove(move) && moveSteps >= 16)
           || (isVerticalMove(move) && moveSteps >= 10)) {
          moveSteps = 0;
-         if (hasPendingMove) {
-            hasPendingMove = false;
-            if (pendingMove != move) {
-               currentFrameIdx = 0;
-            }
-            move = pendingMove;
-         } else {
-            currentFrameIdx = 0;
-            isMoving = false;
-         }
+         isMoving = false;
+         currentFrameIdx = 0;
       }
    }
 }
