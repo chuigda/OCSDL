@@ -12,7 +12,8 @@
 {
    OCSDLRenderer *renderer;
 
-   Sprite *playerSprite;
+   Sprite *marisaSprite;
+   Sprite *cirnoSprite;
 }
 
 -(void)setWindow:(OCSDLWindow*)window setRenderer:(OCSDLRenderer*)renderer;
@@ -35,29 +36,43 @@
 
 -(void)prepare
 {
-   OCSDLSurface *spriteSurface = [[OCSDLSurface alloc]
-                                  initWithImage:@"./Sprites/Cirno.png"];
-   [spriteSurface setColorKeyR:0xff g:0x00 b:0xff];
+   {
+      OCSDLSurface *spriteSurface = [[OCSDLSurface alloc]
+                                     initWithImage:@"./Sprites/Marisa.png"];
+      [spriteSurface setColorKeyR:0xff g:0x00 b:0xff];
+      OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
+                                     init:renderer
+                              fromSurface:spriteSurface];
+      NSArray *frames = [spriteTexture spriteSplit:OC_SDL_ROW rows:11 cols:8];
+      NSArray *walkBackFrames = [frames subarrayWithRange:NSMakeRange(0, 6)];
+      NSArray *walkFrontFrames = [frames subarrayWithRange:NSMakeRange(6, 6)];
+      NSArray *walkLeftFrames = [frames subarrayWithRange:NSMakeRange(12, 6)];
+      NSArray *walkRightFrames = [frames subarrayWithRange:NSMakeRange(18, 6)];
 
-   OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
-                                  init:renderer
-                           fromSurface:spriteSurface];
-   NSArray *frames = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
+      NSArray *frameSets = [[NSArray alloc]
+                            initWithObjects:walkBackFrames, walkFrontFrames, walkLeftFrames, walkRightFrames, nil];
+      marisaSprite = [[Sprite alloc] init:frameSets withFrameSkip:1];
+      [marisaSprite setPosition:(OCSDLPoint) { 320 - 32, 220 }];
+   }
 
-   NSArray *walkBackFrames = [frames subarrayWithRange:NSMakeRange(0, 6)];
-   NSArray *walkFrontFrames = [frames subarrayWithRange:NSMakeRange(6, 6)];
-   NSArray *walkLeftFrames = [frames subarrayWithRange:NSMakeRange(12, 6)];
-   NSArray *walkRightFrames = [frames subarrayWithRange:NSMakeRange(18, 6)];
+   {
+      OCSDLSurface *spriteSurface = [[OCSDLSurface alloc]
+                                     initWithImage:@"./Sprites/Cirno.png"];
+      [spriteSurface setColorKeyR:0xff g:0x00 b:0xff];
+      OCSDLTexture *spriteTexture = [[OCSDLTexture alloc]
+                                     init:renderer
+                              fromSurface:spriteSurface];
+      NSArray *frames = [spriteTexture spriteSplit:OC_SDL_ROW rows:4 cols:8];
+      NSArray *walkBackFrames = [frames subarrayWithRange:NSMakeRange(0, 6)];
+      NSArray *walkFrontFrames = [frames subarrayWithRange:NSMakeRange(6, 6)];
+      NSArray *walkLeftFrames = [frames subarrayWithRange:NSMakeRange(12, 6)];
+      NSArray *walkRightFrames = [frames subarrayWithRange:NSMakeRange(18, 6)];
 
-   NSArray *frameSets = [[NSArray alloc]
-                         initWithObjects:walkBackFrames, walkFrontFrames, walkLeftFrames, walkRightFrames, nil];
-
-   playerSprite = [[Sprite alloc] init:frameSets];
-
-   OCSDLPoint point;
-   point.x = 320;
-   point.y = 240;
-   [playerSprite setPosition:point];
+      NSArray *frameSets = [[NSArray alloc]
+         initWithObjects:walkBackFrames, walkFrontFrames, walkLeftFrames, walkRightFrames, nil];
+      cirnoSprite = [[Sprite alloc] init:frameSets withFrameSkip:1];
+      [cirnoSprite setPosition:(OCSDLPoint) {320 + 32, 220 }];
+   }
 }
 
 -(void)beforePaint
@@ -68,7 +83,8 @@
 
 -(void)paint
 {
-   [playerSprite render:renderer];
+   [marisaSprite renderWithBorderBox:renderer];
+   [cirnoSprite renderWithBorderBox:renderer];
    [renderer present];
 }
 
@@ -79,25 +95,41 @@
 
 -(void)handleKeyboardEvent:(OCSDLKeyboardEvent*)keyboardEvent
 {
-   switch ([keyboardEvent keysym].sym) {
-      case SDLK_LEFT:
-         [playerSprite orderToMove:MoveLeft];
-         break;
-      case SDLK_RIGHT:
-         [playerSprite orderToMove:MoveRight];
-         break;
-      case SDLK_UP:
-         [playerSprite orderToMove:MoveBack];
-         break;
-      case SDLK_DOWN:
-         [playerSprite orderToMove:MoveFront];
-         break;
+   if (keyboardEvent.state != SDL_RELEASED) {
+      switch ([keyboardEvent keysym].sym) {
+         case SDLK_a:
+            [marisaSprite orderToMove:MoveLeft];
+            break;
+         case SDLK_d:
+            [marisaSprite orderToMove:MoveRight];
+            break;
+         case SDLK_w:
+            [marisaSprite orderToMove:MoveBack];
+            break;
+         case SDLK_s:
+            [marisaSprite orderToMove:MoveFront];
+            break;
+
+         case SDLK_LEFT:
+            [cirnoSprite orderToMove:MoveLeft];
+            break;
+         case SDLK_RIGHT:
+            [cirnoSprite orderToMove:MoveRight];
+            break;
+         case SDLK_UP:
+            [cirnoSprite orderToMove:MoveBack];
+            break;
+         case SDLK_DOWN:
+            [cirnoSprite orderToMove:MoveFront];
+            break;
+      }
    }
 }
 
 -(void)updateFrame
 {
-   [playerSprite update];
+   [marisaSprite update];
+   [cirnoSprite update];
 }
 
 -(int)targetFrameRate
